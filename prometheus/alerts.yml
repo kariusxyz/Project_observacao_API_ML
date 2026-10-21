@@ -1,0 +1,18 @@
+groups:
+  - name: mlops-laboratorio
+    rules:
+      - alert: LatenciaP95Elevada
+        expr: histogram_quantile(0.95, sum by (le) (rate(latencia_inferencia_segundos_bucket[1m]))) > 0.2
+        for: 30s
+        labels:
+          severity: warning
+        annotations:
+          summary: 'Latencia p95 acima de 200 ms'
+          description: 'Regra didatica: avalia a condicao; notificacoes exigem Alertmanager ou Grafana Alerting.'
+      - alert: APIIndisponivel
+        expr: up{job="api-observavel"} == 0
+        for: 20s
+        labels:
+          severity: critical
+        annotations:
+          summary: 'Prometheus nao consegue coletar a API'

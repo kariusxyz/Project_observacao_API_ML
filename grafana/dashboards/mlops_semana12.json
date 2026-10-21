@@ -1,0 +1,135 @@
+{
+  "uid": "mlops-s12",
+  "title": "MLOps • API de Inferência • Semana 12",
+  "schemaVersion": 40,
+  "version": 1,
+  "refresh": "5s",
+  "timezone": "browser",
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "timeseries",
+      "title": "Predições por segundo",
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PROM_S12"
+      },
+      "targets": [
+        {
+          "expr": "sum(rate(predicoes_total[1m]))",
+          "refId": "A",
+          "legendFormat": "Predições por segundo"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps"
+        },
+        "overrides": []
+      },
+      "options": {}
+    },
+    {
+      "id": 2,
+      "type": "timeseries",
+      "title": "Latência p95 (segundos)",
+      "gridPos": {
+        "x": 12,
+        "y": 0,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PROM_S12"
+      },
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum by (le) (rate(latencia_inferencia_segundos_bucket[1m])))",
+          "refId": "A",
+          "legendFormat": "Latência p95 (segundos)"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "options": {}
+    },
+    {
+      "id": 3,
+      "type": "timeseries",
+      "title": "Taxa de erro (%)",
+      "gridPos": {
+        "x": 0,
+        "y": 9,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PROM_S12"
+      },
+      "targets": [
+        {
+          "expr": "100 * sum(rate(predicoes_total{resultado=\"erro\"}[1m])) / clamp_min(sum(rate(predicoes_total[1m])), 0.000001)",
+          "refId": "A",
+          "legendFormat": "Taxa de erro (%)"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "options": {}
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "Modelo carregado",
+      "gridPos": {
+        "x": 12,
+        "y": 9,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PROM_S12"
+      },
+      "targets": [
+        {
+          "expr": "modelo_carregado",
+          "refId": "A",
+          "legendFormat": "Modelo carregado"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "options": {}
+    }
+  ],
+  "tags": [
+    "mlops",
+    "ensino-superior",
+    "semana12"
+  ]
+}

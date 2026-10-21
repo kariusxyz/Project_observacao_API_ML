@@ -1,0 +1,11 @@
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+rule_files:
+  - /etc/prometheus/alerts.yml
+scrape_configs:
+  - job_name: api-observavel
+    static_configs:
+      - targets: ['modelo:8000']
+    metrics_path: /metrics
+    scrape_interval: 5s
